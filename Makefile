@@ -12,9 +12,9 @@ BIN_DIR := bin
 OBJS := $(patsubst %.c,%.o, $(wildcard $(SRC_DIR)/*.c) $(wildcard $(LIB_DIR)/**/*.c))
 
 # Compiler settings
-CC := gcc 
+CC := clang
 LINTER := clang-tidy-18
-FORMATTER := clang-format-18
+FORMATTER := clang-format
 
 # Compiler and Linker flags Settings:
 # 	-std=gnu17: Use the GNU17 standard
@@ -36,6 +36,7 @@ endif
 # Targets
 
 # Build executable
+# $(NAME): format lint dir $(OBJS)
 $(NAME): dir $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BIN_DIR)/$@ $(patsubst %, build/%, $(OBJS))
 
