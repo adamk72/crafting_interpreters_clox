@@ -20,7 +20,7 @@ static int simpleInstruction(const char *name, int offset)
 
 int disassembleInstruction(Chunk *chunk, int offset)
 {
-  printf("%04d ", offset);
+  printf("%04d ", offset); // note there's no \n
 
   uint8_t instruction = chunk->code[offset];
   switch (instruction)
