@@ -2,4 +2,11 @@
   "cSpell.words": [
     "clox"
   ],
+  "files.associations": {
+    "*.ejs": "html",
+    "*.ts": "typescriptreact",
+    "*.css": "tailwindcss",
+    "chunk.h": "c",
+    "value.h": "c"
+  },
 }
