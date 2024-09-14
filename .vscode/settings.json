@@ -14,6 +14,15 @@
     "stdio.h": "c",
     "common.h": "c",
     "compiler.h": "c",
-    "scanner.h": "c"
+    "scanner.h": "c",
+    "__bit_reference": "c",
+    "bitset": "c",
+    "__memory": "c",
+    "limits": "c",
+    "locale": "c",
+    "ratio": "c",
+    "tuple": "c",
+    "object.h": "c",
+    "memory.h": "c"
   },
 }
