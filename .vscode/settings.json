@@ -10,6 +10,9 @@
     "value.h": "c",
     "debug.h": "c",
     "vm.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "common.h": "c",
+    "compiler.h": "c",
+    "scanner.h": "c"
   },
 }

@@ -7,7 +7,7 @@
 #include "../include/debug.h"
 #include "../include/vm.h"
 
-static void repl()
+static void repl(void)
 {
   char line[1024];
   for (;;)

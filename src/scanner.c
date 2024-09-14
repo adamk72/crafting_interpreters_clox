@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "common.h"
-#include "scanner.h"
+#include "../include/common.h"
+#include "../include/scanner.h"
 
 typedef struct
 {
@@ -10,6 +10,8 @@ typedef struct
   const char *current;
   int line;
 } Scanner;
+
+Scanner scanner;
 
 void initScanner(const char *source)
 {
