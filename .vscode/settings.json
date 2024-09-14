@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
-    "clox"
+    "clox",
+    "Falsey"
   ],
   "files.associations": {
     "*.ejs": "html",
