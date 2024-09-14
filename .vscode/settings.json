@@ -24,6 +24,9 @@
     "tuple": "c",
     "object.h": "c",
     "memory.h": "c",
-    "stdarg.h": "c"
+    "stdarg.h": "c",
+    "__locale": "c",
+    "string": "c",
+    "string_view": "c"
   },
 }

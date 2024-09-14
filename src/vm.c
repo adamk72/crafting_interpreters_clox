@@ -34,10 +34,12 @@ static void runtimeError(const char *format, ...)
 void initVM(void)
 {
   resetStack();
+  vm.objects = NULL;
 }
 
 void freeVM(void)
 {
+  freeObjects();
 }
 
 void push(Value value)
@@ -62,20 +64,20 @@ static bool isFalsey(Value value)
   return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }
 
-static void concatenate(void) {
-  ObjString* b = AS_STRING(pop());
-  ObjString* a = AS_STRING(pop());
+static void concatenate(void)
+{
+  ObjString *b = AS_STRING(pop());
+  ObjString *a = AS_STRING(pop());
 
   int length = a->length + b->length;
-  char* chars = ALLOCATE(char, length + 1);
+  char *chars = ALLOCATE(char, length + 1);
   memcpy(chars, a->chars, a->length);
   memcpy(chars + a->length, b->chars, b->length);
   chars[length] = '\0';
 
-  ObjString* result = takeString(chars, length);
+  ObjString *result = takeString(chars, length);
   push(OBJ_VAL(result));
 }
-
 
 static InterpretResult run(void)
 {
