@@ -14,6 +14,21 @@ typedef struct
   bool panicMode;
 } Parser;
 
+typedef enum
+{
+  PREC_NONE,
+  PREC_ASSIGNMENT, // =
+  PREC_OR,         // or
+  PREC_AND,        // and
+  PREC_EQUALITY,   // == !=
+  PREC_COMPARISON, // < > <= >=
+  PREC_TERM,       // + -
+  PREC_FACTOR,     // * /
+  PREC_UNARY,      // ! -
+  PREC_CALL,       // . ()
+  PREC_PRIMARY
+} Precedence;
+
 Parser parser;
 Chunk *compilingChunk;
 
@@ -87,18 +102,22 @@ static void emitByte(uint8_t byte)
   writeChunk(currentChunk(), byte, parser.previous.line);
 }
 
-static void emitBytes(uint8_t byte1, uint8_t byte2) {
+static void emitBytes(uint8_t byte1, uint8_t byte2)
+{
   emitByte(byte1);
   emitByte(byte2);
 }
 
-static void emitReturn(void) {
+static void emitReturn(void)
+{
   emitByte(OP_RETURN);
 }
 
-static uint8_t makeConstant(Value value) {
+static uint8_t makeConstant(Value value)
+{
   int constant = addConstant(currentChunk(), value);
-  if (constant > UINT8_MAX) {
+  if (constant > UINT8_MAX)
+  {
     error("Too many constants in one chunk.");
     return 0;
   }
@@ -106,21 +125,56 @@ static uint8_t makeConstant(Value value) {
   return (uint8_t)constant;
 }
 
-static void emitConstant(Value value) {
+static void emitConstant(Value value)
+{
   emitBytes(OP_CONSTANT, makeConstant(value));
 }
 
-static void endCompiler(void) {
+static void endCompiler(void)
+{
   emitReturn();
 }
 
-__attribute__((unused)) static void number(void) {
+
+static void parsePrecedence(Precedence precedence)
+{
+  // What goes here?
+}
+
+
+static void expression(void)
+{
+  parsePrecedence(PREC_ASSIGNMENT);
+}
+
+static void grouping(void)
+{
+  expression();
+  consume(TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
+}
+
+static void number(void)
+{
   double value = strtod(parser.previous.start, NULL);
   emitConstant(value);
 }
 
-static void expression(void) {
-  // What goes here?
+static void unary(void)
+{
+  TokenType operatorType = parser.previous.type;
+
+  // Compile the operand.
+  parsePrecedence(PREC_UNARY);
+
+  // Emit the operator instruction.
+  switch (operatorType)
+  {
+  case TOKEN_MINUS:
+    emitByte(OP_NEGATE);
+    break;
+  default:
+    return; // Unreachable.
+  }
 }
 
 bool compile(const char *source, Chunk *chunk)
