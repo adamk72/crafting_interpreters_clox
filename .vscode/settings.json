@@ -23,6 +23,7 @@
     "ratio": "c",
     "tuple": "c",
     "object.h": "c",
-    "memory.h": "c"
+    "memory.h": "c",
+    "stdarg.h": "c"
   },
 }
