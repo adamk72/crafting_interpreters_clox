@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "../include/common.h"
 #include "../include/chunk.h"
 #include "../include/debug.h"
@@ -11,6 +13,7 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) const char *a
   int constant = addConstant(&chunk, 1.2);
   writeChunk(&chunk, OP_CONSTANT, 123);
   writeChunk(&chunk, constant, 123);
+  writeChunk(&chunk, OP_NEGATE, 123);
 
   writeChunk(&chunk, OP_RETURN, 123);
   disassembleChunk(&chunk, "test chunk");
