@@ -3,7 +3,7 @@
 #include "../include/debug.h"
 #include "../include/vm.h"
 
-int main(int argc, const char *argv[])
+int main(__attribute__((unused)) int argc, __attribute__((unused)) const char *argv[])
 {
   initVM();
   Chunk chunk;

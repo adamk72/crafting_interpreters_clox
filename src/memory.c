@@ -2,7 +2,7 @@
 
 #include "../include/memory.h"
 
-void *reallocate(void *pointer, size_t oldSize, size_t newSize)
+void *reallocate(void *pointer, __attribute__((unused)) size_t oldSize, size_t newSize)
 {
   if (newSize == 0)
   {
