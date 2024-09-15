@@ -110,12 +110,15 @@ static void consume(TokenType type, const char *message)
   errorAtCurrent(message);
 }
 
-static bool check(TokenType type) {
+static bool check(TokenType type)
+{
   return parser.current.type == type;
 }
 
-static bool match(TokenType type) {
-  if (!check(type)) return false;
+static bool match(TokenType type)
+{
+  if (!check(type))
+    return false;
   advance();
   return true;
 }
@@ -256,19 +259,33 @@ static void expression(void)
   parsePrecedence(PREC_ASSIGNMENT);
 }
 
-static void printStatement(void) {
+static void expressionStatement() {
+  expression();
+  consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
+  emitByte(OP_POP);
+}
+
+static void printStatement(void)
+{
   expression();
   consume(TOKEN_SEMICOLON, "Expect ';' after value.");
   emitByte(OP_PRINT);
 }
 
-static void declaration(void) {
+static void declaration(void)
+{
   statement();
 }
 
-static void statement(void) {
-  if (match(TOKEN_PRINT)) {
+static void statement(void)
+{
+  if (match(TOKEN_PRINT))
+  {
     printStatement();
+  }
+  else
+  {
+    expressionStatement();
   }
 }
 
@@ -370,7 +387,8 @@ bool compile(const char *source, Chunk *chunk)
   __attribute__((unused)) int line = -1;
   advance();
 
-  while (!match(TOKEN_EOF)) {
+  while (!match(TOKEN_EOF))
+  {
     declaration();
   }
 
