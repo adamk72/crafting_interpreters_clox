@@ -28,6 +28,7 @@
     "__locale": "c",
     "string": "c",
     "string_view": "c",
-    "table.h": "c"
+    "table.h": "c",
+    "stdlib.h": "c"
   },
 }
