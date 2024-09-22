@@ -1,7 +1,9 @@
 {
   "cSpell.words": [
     "clox",
-    "Falsey"
+    "Falsey",
+    "Upvalue",
+    "upvalues"
   ],
   "files.associations": {
     "*.ejs": "html",
@@ -30,6 +32,7 @@
     "string_view": "c",
     "table.h": "c",
     "stdlib.h": "c",
-    "string.h": "c"
+    "string.h": "c",
+    "variant": "c"
   },
 }
