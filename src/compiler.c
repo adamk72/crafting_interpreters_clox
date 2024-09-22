@@ -149,6 +149,16 @@ static void emitBytes(uint8_t byte1, uint8_t byte2)
   emitByte(byte2);
 }
 
+static void emitLoop(int loopStart) {
+  emitByte(OP_LOOP);
+
+  int offset = currentChunk()->count - loopStart + 2;
+  if (offset > UINT16_MAX) error("Loop body too large.");
+
+  emitByte((offset >> 8) & 0xff);
+  emitByte(offset & 0xff);
+}
+
 static int emitJump(uint8_t instruction)
 {
   emitByte(instruction);
@@ -487,6 +497,23 @@ static void printStatement(void)
   emitByte(OP_PRINT);
 }
 
+static void whileStatement()
+{
+  int loopStart = currentChunk()->count;
+
+  consume(TOKEN_LEFT_PAREN, "Expect '(' after 'while'.");
+  expression();
+  consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition.");
+
+  int exitJump = emitJump(OP_JUMP_IF_FALSE);
+  emitByte(OP_POP);
+  statement();
+  emitLoop(loopStart);
+
+  patchJump(exitJump);
+  emitByte(OP_POP);
+}
+
 static void synchronize(void)
 {
   parser.panicMode = false;
@@ -539,6 +566,10 @@ static void statement(void)
   {
     ifStatement();
   }
+  else if (match(TOKEN_WHILE))
+  {
+    whileStatement();
+  }
   else if (match(TOKEN_LEFT_BRACE))
   {
     beginScope();
@@ -563,7 +594,8 @@ static void number(__attribute__((unused)) bool canAssign)
   emitConstant(NUMBER_VAL(value));
 }
 
-static void or_(bool canAssign) {
+static void or_(bool canAssign)
+{
   int elseJump = emitJump(OP_JUMP_IF_FALSE);
   int endJump = emitJump(OP_JUMP);
 
