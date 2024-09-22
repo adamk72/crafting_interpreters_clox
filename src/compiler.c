@@ -642,6 +642,24 @@ static void printStatement(void)
   emitByte(OP_PRINT);
 }
 
+static void returnStatement(void)
+{
+  if (current->type == TYPE_SCRIPT)
+  {
+    error("Can't return from top-level code.");
+  }
+  if (match(TOKEN_SEMICOLON))
+  {
+    emitReturn();
+  }
+  else
+  {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+    emitByte(OP_RETURN);
+  }
+}
+
 static void whileStatement(void)
 {
   int loopStart = currentChunk()->count;
@@ -710,6 +728,10 @@ static void statement(void)
   if (match(TOKEN_PRINT))
   {
     printStatement();
+  }
+  else if (match(TOKEN_RETURN))
+  {
+    returnStatement();
   }
   else if (match(TOKEN_FOR))
   {
