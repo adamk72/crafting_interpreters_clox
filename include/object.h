@@ -42,7 +42,7 @@ struct ObjString
   uint32_t hash;
 };
 
-ObjFunction *newFunction();
+ObjFunction *newFunction(void);
 ObjString *copyString(const char *chars, int length);
 ObjString *takeString(char *chars, int length);
 void printObject(Value value);
