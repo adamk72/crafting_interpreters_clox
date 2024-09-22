@@ -67,7 +67,7 @@ typedef struct
 Parser parser;
 Compiler *current = NULL;
 
-static Chunk *currentChunk()
+static Chunk *currentChunk(void)
 {
   return &current->function->chunk;
 }

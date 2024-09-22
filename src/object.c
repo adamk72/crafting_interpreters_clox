@@ -30,7 +30,7 @@ static ObjString *allocateString(char *chars, int length,
   return string;
 }
 
-ObjFunction *newFunction()
+ObjFunction *newFunction(void)
 {
   ObjFunction *function = ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
   function->arity = 0;
