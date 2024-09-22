@@ -423,7 +423,7 @@ static void defineVariable(uint8_t global)
   emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
-static void and_(bool canAssign)
+static void and_(__attribute__((unused))bool canAssign)
 {
   int endJump = emitJump(OP_JUMP_IF_FALSE);
 
@@ -473,7 +473,7 @@ static void expressionStatement(void)
   emitByte(OP_POP);
 }
 
-static void forStatement()
+static void forStatement(void)
 {
   beginScope();
   consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
@@ -524,7 +524,7 @@ static void forStatement()
   endScope();
 }
 
-static void ifStatement()
+static void ifStatement(void)
 {
   consume(TOKEN_LEFT_PAREN, "Expect '(' after 'if'.");
   expression();
@@ -550,7 +550,7 @@ static void printStatement(void)
   emitByte(OP_PRINT);
 }
 
-static void whileStatement()
+static void whileStatement(void)
 {
   int loopStart = currentChunk()->count;
 
@@ -651,7 +651,7 @@ static void number(__attribute__((unused)) bool canAssign)
   emitConstant(NUMBER_VAL(value));
 }
 
-static void or_(bool canAssign)
+static void or_(__attribute__((unused)) bool canAssign)
 {
   int elseJump = emitJump(OP_JUMP_IF_FALSE);
   int endJump = emitJump(OP_JUMP);
