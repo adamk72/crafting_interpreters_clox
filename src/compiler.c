@@ -179,6 +179,7 @@ static int emitJump(uint8_t instruction)
 
 static void emitReturn(void)
 {
+  emitByte(OP_NIL);
   emitByte(OP_RETURN);
 }
 
@@ -272,6 +273,7 @@ static void statement(void);
 static void declaration(void);
 static ParseRule *getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
+static uint8_t argumentList(void);
 
 static void binary(__attribute__((unused)) bool canAssign)
 {
@@ -314,6 +316,12 @@ static void binary(__attribute__((unused)) bool canAssign)
   default:
     return; // Unreachable.
   }
+}
+
+static void call(__attribute__((unused)) bool canAssign)
+{
+  uint8_t argCount = argumentList();
+  emitBytes(OP_CALL, argCount);
 }
 
 static void literal(__attribute__((unused)) bool canAssign)
@@ -450,6 +458,25 @@ static void defineVariable(uint8_t global)
     return;
   }
   emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
+static uint8_t argumentList(void)
+{
+  uint8_t argCount = 0;
+  if (!check(TOKEN_RIGHT_PAREN))
+  {
+    do
+    {
+      expression();
+      if (argCount == 255)
+      {
+        error("Can't have more than 255 arguments.");
+      }
+      argCount++;
+    } while (match(TOKEN_COMMA));
+  }
+  consume(TOKEN_RIGHT_PAREN, "Expect ')' after arguments.");
+  return argCount;
 }
 
 static void and_(__attribute__((unused)) bool canAssign)
@@ -790,7 +817,7 @@ static void unary(__attribute__((unused)) bool canAssign)
 }
 
 ParseRule rules[] = {
-    [TOKEN_LEFT_PAREN] = {grouping, NULL, PREC_NONE},
+    [TOKEN_LEFT_PAREN] = {grouping, call, PREC_CALL},
     [TOKEN_RIGHT_PAREN] = {NULL, NULL, PREC_NONE},
     [TOKEN_LEFT_BRACE] = {NULL, NULL, PREC_NONE},
     [TOKEN_RIGHT_BRACE] = {NULL, NULL, PREC_NONE},
