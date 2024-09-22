@@ -189,12 +189,12 @@ static void endCompiler(void)
 #endif
 }
 
-static void beginScope()
+static void beginScope(void)
 {
   current->scopeDepth++;
 }
 
-static void endScope()
+static void endScope(void)
 {
   current->scopeDepth--;
   while (current->localCount > 0 &&
@@ -212,7 +212,7 @@ static void declaration(void);
 static ParseRule *getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 
-static void binary(bool canAssign)
+static void binary(__attribute__((unused)) bool canAssign)
 {
   TokenType operatorType = parser.previous.type;
   ParseRule *rule = getRule(operatorType);
@@ -255,7 +255,7 @@ static void binary(bool canAssign)
   }
 }
 
-static void literal(bool canAssign)
+static void literal(__attribute__((unused)) bool canAssign)
 {
   switch (parser.previous.type)
   {
@@ -342,7 +342,7 @@ static void addLocal(Token name)
   local->depth = -1;
 }
 
-static void declareVariable()
+static void declareVariable(void)
 {
   if (current->scopeDepth == 0)
     return;
@@ -374,7 +374,7 @@ static uint8_t parseVariable(const char *errorMessage)
   return identifierConstant(&parser.previous);
 }
 
-static void markInitialized()
+static void markInitialized(void)
 {
   current->locals[current->localCount - 1].depth = current->scopeDepth;
 }
@@ -394,7 +394,7 @@ static void expression(void)
   parsePrecedence(PREC_ASSIGNMENT);
 }
 
-static void block()
+static void block(void)
 {
   while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF))
   {
@@ -496,19 +496,19 @@ static void statement(void)
   }
 }
 
-static void grouping(bool canAssign)
+static void grouping(__attribute__((unused)) bool canAssign)
 {
   expression();
   consume(TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
 }
 
-static void number(bool canAssign)
+static void number(__attribute__((unused)) bool canAssign)
 {
   double value = strtod(parser.previous.start, NULL);
   emitConstant(NUMBER_VAL(value));
 }
 
-static void string(bool canAssign)
+static void string(__attribute__((unused)) bool canAssign)
 {
   emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
 }
@@ -544,7 +544,7 @@ static void variable(bool canAssign)
   namedVariable(parser.previous, canAssign);
 }
 
-static void unary(bool canAssign)
+static void unary(__attribute__((unused)) bool canAssign)
 {
   TokenType operatorType = parser.previous.type;
 
