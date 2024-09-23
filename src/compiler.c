@@ -980,7 +980,7 @@ ObjFunction *compile(const char *source)
   return parser.hadError ? NULL : function;
 }
 
-void markCompilerRoots()
+void markCompilerRoots(void)
 {
   Compiler *compiler = current;
   while (compiler != NULL)
