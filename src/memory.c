@@ -62,6 +62,12 @@ static void blackenObject(Obj *object)
 
   switch (object->type)
   {
+  case OBJ_CLASS:
+  {
+    ObjClass *klass = (ObjClass *)object;
+    markObject((Obj *)klass->name);
+    break;
+  }
   case OBJ_CLOSURE:
   {
     ObjClosure *closure = (ObjClosure *)object;
@@ -119,11 +125,9 @@ static void freeObject(Obj *object)
 
   switch (object->type)
   {
-  case OBJ_FUNCTION:
+  case OBJ_CLASS:
   {
-    ObjFunction *function = (ObjFunction *)object;
-    freeChunk(&function->chunk);
-    FREE(ObjFunction, object);
+    FREE(ObjClass, object);
     break;
   }
   case OBJ_CLOSURE:
@@ -131,6 +135,13 @@ static void freeObject(Obj *object)
     ObjClosure *closure = (ObjClosure *)object;
     FREE_ARRAY(ObjUpvalue *, closure->upvalues, closure->upvalueCount);
     FREE(ObjClosure, object);
+    break;
+  }
+  case OBJ_FUNCTION:
+  {
+    ObjFunction *function = (ObjFunction *)object;
+    freeChunk(&function->chunk);
+    FREE(ObjFunction, object);
     break;
   }
   case OBJ_NATIVE:
@@ -179,7 +190,7 @@ static void traceReferences(void)
   }
 }
 
-static void sweep()
+static void sweep(void)
 {
   Obj *previous = NULL;
   Obj *object = vm.objects;
